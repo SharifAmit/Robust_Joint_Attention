@@ -1,7 +1,7 @@
 import argparse
 import keras
 from src.dataloader import Srinivasan_2014
-from src.model import OpticNet
+from src.model import OpticNet, resnet50, mobilenetv2
 import time
 import keras.backend as K
 import gc
@@ -27,7 +27,12 @@ def train(data_dir, logdir, input_size, batch_size, weights, epoch, pre_trained_
 
 
     # Loading the model
-    model = OpticNet(input_size,num_of_classes)
+    if pre_trained_model==None:
+        model = OpticNet(input_size,num_of_classes)
+    elif pre_trained_model=='ResNet50':
+        model = resnet50(input_size,num_of_classes)
+    elif pre_trained_model=='MobileNetV2':
+        model = mobilenetv2(input_size,num_of_classes)
 
     # Training the model
     history = model.fit_generator(train_generator, shuffle=True, steps_per_epoch=train_size //batch_size, validation_data=validation_generator, validation_steps= test_size//batch_size, epochs=epoch, verbose=1, callbacks=cb)
@@ -47,7 +52,7 @@ def train(data_dir, logdir, input_size, batch_size, weights, epoch, pre_trained_
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch', type=int, default=8)
+    parser.add_argument('--batch', type=int, default=4)
     parser.add_argument('--input_dim', type=int, default=224)
     parser.add_argument('--datadir', type=str, required=True, help='path/to/data_directory')
     parser.add_argument('--epoch', type=int, default=30)

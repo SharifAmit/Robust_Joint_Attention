@@ -5,7 +5,8 @@ from keras.layers import Add, Activation, BatchNormalization, Conv2D, Dense, Glo
 from keras.initializers import glorot_uniform
 from keras import Model
 from keras.optimizers import Adam
-
+from keras.applications.resnet50 import ResNet50
+from keras.applications.mobilenet_v2 import MobileNetV2
 
 def res_conv(X, filters, base, s):
     
@@ -172,6 +173,80 @@ def OpticNet(input_size,num_of_classes):
     
     
     model = Model(inputs=X_input, outputs=[X,X_up], name='')
+
+    model.compile(Adam(lr=.0001), loss={'classifier':'categorical_crossentropy','autoencoder':'mean_squared_error'}, metrics={'classifier': 'accuracy', 'autoencoder': 'accuracy'})
+    
+    model.summary()
+    
+    return model
+
+def resnet50(image_size,num_of_classes):    
+    input_shape = (image_size,image_size,3)
+    base_model = ResNet50(weights='imagenet',include_top=False,pooling=None,input_shape=input_shape)
+    X = base_model.output
+    
+    X_Conv = Conv2D(3,(3,3,),strides=(1,1),padding='same', name='upsampled_conv',kernel_initializer=glorot_uniform(seed=0))(X)
+    X_up = UpSampling2D(size=(2, 2),interpolation='bilinear',name = 'autoencoder/Upsample1')(X_Conv)
+    X_feat1 = base_model.get_layer('activation_40').output
+    X_feat1 = Conv2D(3,(3,3),strides=(1,1),padding='same', name='feat1_conv',kernel_initializer=glorot_uniform(seed=0))(X_feat1)
+    X_up = Add()([X_feat1,X_up]) 
+    X_up = UpSampling2D(size=(2, 2),interpolation='bilinear',name = 'autoencoder/Upsample2')(X_up)
+    X_feat2 = base_model.get_layer('activation_22').output
+    X_feat2 = Conv2D(3,(3,3),strides=(1,1),padding='same', name='feat2_conv',kernel_initializer=glorot_uniform(seed=0))(X_feat2)
+    X_up = Add()([X_feat2,X_up])    
+    X_up = UpSampling2D(size=(2, 2),interpolation='bilinear',name = 'autoencoder/Upsample3')(X_up)
+    X_feat3 = base_model.get_layer('activation_10').output
+    X_feat3 = Conv2D(3,(3,3),strides=(1,1),padding='same', name='feat3_conv',kernel_initializer=glorot_uniform(seed=0))(X_feat3)
+    X_up = Add()([X_feat3,X_up])
+    X_up = UpSampling2D(size=(2, 2),interpolation='bilinear',name = 'autoencoder/Upsample4')(X_up)
+    X_feat4 = base_model.get_layer('activation_1').output
+    X_feat4 = Conv2D(3,(3,3),strides=(1,1),padding='same', name='feat4_conv',kernel_initializer=glorot_uniform(seed=0))(X_feat4)
+    X_up = Add()([X_feat4,X_up])
+    X_up = UpSampling2D(size=(2, 2),interpolation='bilinear',name = 'autoencoder')(X_up)
+    X = GlobalAveragePooling2D(name='global_avg_pool')(X)
+    X = Dense(256, name='Dense_1')(X)
+    X = Dense(num_of_classes, name='Dense_2')(X)
+    X = Activation('softmax', name='classifier')(X)
+    
+    
+    model = Model(inputs=base_model.input, outputs=[X,X_up], name='')
+
+    model.compile(Adam(lr=.0001), loss={'classifier':'categorical_crossentropy','autoencoder':'mean_squared_error'}, metrics={'classifier': 'accuracy', 'autoencoder': 'accuracy'})
+    
+    model.summary()
+    
+    return model
+
+def mobilenetv2(image_size,num_of_classes):    
+    input_shape = (image_size,image_size,3)
+    base_model = MobileNetV2(weights='imagenet',include_top=False,pooling=None,input_shape=input_shape)
+    X = base_model.output
+    
+    X_Conv = Conv2D(3,(3,3,),strides=(1,1),padding='same', name='upsampled_conv',kernel_initializer=glorot_uniform(seed=0))(X)
+    X_up = UpSampling2D(size=(2, 2),interpolation='bilinear',name = 'autoencoder/Upsample1')(X_Conv)
+    X_feat1 = base_model.get_layer('block_13_expand_relu').output
+    X_feat1 = Conv2D(3,(3,3),strides=(1,1),padding='same', name='feat1_conv',kernel_initializer=glorot_uniform(seed=0))(X_feat1)
+    X_up = Add()([X_feat1,X_up]) 
+    X_up = UpSampling2D(size=(2, 2),interpolation='bilinear',name = 'autoencoder/Upsample2')(X_up)
+    X_feat2 = base_model.get_layer('block_6_expand_relu').output
+    X_feat2 = Conv2D(3,(3,3),strides=(1,1),padding='same', name='feat2_conv',kernel_initializer=glorot_uniform(seed=0))(X_feat2)
+    X_up = Add()([X_feat2,X_up])    
+    X_up = UpSampling2D(size=(2, 2),interpolation='bilinear',name = 'autoencoder/Upsample3')(X_up)
+    X_feat3 = base_model.get_layer('block_3_expand_relu').output
+    X_feat3 = Conv2D(3,(3,3),strides=(1,1),padding='same', name='feat3_conv',kernel_initializer=glorot_uniform(seed=0))(X_feat3)
+    X_up = Add()([X_feat3,X_up])
+    X_up = UpSampling2D(size=(2, 2),interpolation='bilinear',name = 'autoencoder/Upsample4')(X_up)
+    X_feat4 = base_model.get_layer('block_1_expand_relu').output
+    X_feat4 = Conv2D(3,(3,3),strides=(1,1),padding='same', name='feat4_conv',kernel_initializer=glorot_uniform(seed=0))(X_feat4)
+    X_up = Add()([X_feat4,X_up])
+    X_up = UpSampling2D(size=(2, 2),interpolation='bilinear',name = 'autoencoder')(X_up)
+    X = GlobalAveragePooling2D(name='global_avg_pool')(X)
+    X = Dense(256, name='Dense_1')(X)
+    X = Dense(num_of_classes, name='Dense_2')(X)
+    X = Activation('softmax', name='classifier')(X)
+    
+    
+    model = Model(inputs=base_model.input, outputs=[X,X_up], name='')
 
     model.compile(Adam(lr=.0001), loss={'classifier':'categorical_crossentropy','autoencoder':'mean_squared_error'}, metrics={'classifier': 'accuracy', 'autoencoder': 'accuracy'})
     
