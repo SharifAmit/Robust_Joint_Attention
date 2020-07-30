@@ -174,7 +174,7 @@ def OpticNet(input_size,num_of_classes):
     
     model = Model(inputs=X_input, outputs=[X,X_up], name='')
 
-    model.compile(Adam(lr=.0001), loss={'classifier':'categorical_crossentropy','autoencoder':'mean_squared_error'}, metrics={'classifier': 'accuracy', 'autoencoder': 'accuracy'})
+    model.compile(Adam(lr=.0001), loss={'classifier':'categorical_crossentropy','autoencoder':'mean_squared_error'}, loss_weights=[0.5,0.5], metrics={'classifier': 'accuracy', 'autoencoder': 'accuracy'})
     
     model.summary()
     
@@ -211,7 +211,7 @@ def resnet50(image_size,num_of_classes):
     
     model = Model(inputs=base_model.input, outputs=[X,X_up], name='')
 
-    model.compile(Adam(lr=.0001), loss={'classifier':'categorical_crossentropy','autoencoder':'mean_squared_error'}, metrics={'classifier': 'accuracy', 'autoencoder': 'accuracy'})
+    model.compile(Adam(lr=.0001), loss={'classifier':'categorical_crossentropy','autoencoder':'mean_squared_error'}, loss_weights=[0.5,0.5], metrics={'classifier': 'accuracy', 'autoencoder': 'accuracy'})
     
     model.summary()
     
@@ -248,7 +248,7 @@ def mobilenetv2(image_size,num_of_classes):
     
     model = Model(inputs=base_model.input, outputs=[X,X_up], name='')
 
-    model.compile(Adam(lr=.0001), loss={'classifier':'categorical_crossentropy','autoencoder':'mean_squared_error'}, metrics={'classifier': 'accuracy', 'autoencoder': 'accuracy'})
+    model.compile(Adam(lr=.0001), loss={'classifier':'categorical_crossentropy','autoencoder':'mean_squared_error'}, loss_weights=[0.5,0.5], metrics={'classifier': 'accuracy', 'autoencoder': 'accuracy'})
     
     model.summary()
     
