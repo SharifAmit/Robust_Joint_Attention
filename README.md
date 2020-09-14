@@ -37,67 +37,6 @@ sudo pip3 install keras==2.3.1
 ```
 sudo pip3 -r requirements.txt
 ```
-## Training on Kermany2018 Dataset
-
-- Please cite the paper if you use their data
-```
-@article{kermany2018identifying,
-  title={Identifying medical diagnoses and treatable diseases by image-based deep learning},
-  author={Kermany, Daniel S and Goldbaum, Michael and Cai, Wenjia and Valentim, Carolina CS and Liang, Huiying and Baxter, Sally L and McKeown, Alex and Yang, Ge and Wu, Xiaokang and Yan, Fangbing and others},
-  journal={Cell},
-  volume={172},
-  number={5},
-  pages={1122--1131},
-  year={2018},
-  publisher={Elsevier}
-}
-```
-
-### Dataset download link for Kermany2014
-```
-https://data.mendeley.com/datasets/rscbjbr9sj/3
-```
-
-- Folder structure for training given below. Please make sure it matches with your local repository.
-```
-├── data
-|   ├──OCT2017
-|       ├──train
-|           ├──CNV
-|           ├──DME
-|           ├──DRUSEN
-|           └──NORMAL
-|       ├──test
-|           ├──CNV
-|           ├──DME
-|           ├──DRUSEN
-|           └──NORMAL
-├── src
-├── LICENSE
-├── README.md
-├── data_preprocess_sri2014.py
-├── inference.py
-├── requirements.txt
-├── test.py
-└── train.py
-```
-- Type this in terminal to run the train.py file
-```
-python3 train.py --dataset=Kermany2018 --datadir=data/OCT2017 --batch=4 --epoch=30 --logdir=optic-net-oct2017-log --snapshot_name=optic-net-oct2017
-```
-- There are different flags to choose from. Not all of them are mandatory
-
-```
-   '--dataset', type=str, required=True, help='Choosing between 2 OCT datasets', choices=['Srinivasan2014','Kermany2018']
-   '--batch', type=int, default=8
-   '--input_dim', type=int, default=224
-   '--datadir', type=str, required=True, help='path/to/data_directory'
-   '--epoch', type=int, default=30
-   '--logdir', type=str
-   '--weights', type=str,default=None, help='Resuming training from previous weights'
-   '--snapshot_name',type=str, default=None, help='Name the saved snapshot'
-```
-
 ## Training on Srinivasan2014 Dataset
 
 - Please cite the paper if you use their data
@@ -179,13 +118,13 @@ python3 train.py --dataset=Srinivasan2014 --datadir=data/Srinivasan2014 --batch=
 - There are different flags to choose from. Not all of them are mandatory
 
 ```
-   '--dataset', type=str, required=True, help='Choosing between 2 OCT datasets', choices=['Srinivasan2014','Kermany2018']
    '--batch', type=int, default=8
    '--input_dim', type=int, default=224
    '--datadir', type=str, required=True, help='path/to/data_directory'
    '--epoch', type=int, default=30
    '--logdir', type=str
    '--weights', type=str,default=None, help='Resuming training from previous weights'
+   '--model',type=str, default=None,help='Pretrained weights for transfer learning',choices=['ResNet50', 'MobileNetV2']
    '--snapshot_name',type=str, default=None, help='Name the saved snapshot'
 ```
 # License
