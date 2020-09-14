@@ -124,7 +124,7 @@ python3 train.py --dataset=Srinivasan2014 --datadir=data/Srinivasan2014 --batch=
    '--epoch', type=int, default=30
    '--logdir', type=str
    '--weights', type=str,default=None, help='Resuming training from previous weights'
-   '--model',type=str, default=None,help='Pretrained weights for transfer learning',choices=['ResNet50', 'MobileNetV2']
+   '--model',type=str, default='OpticNet71',help='Pretrained weights for transfer learning',choices=['OpticNet71','ResNet50', 'MobileNetV2']
    '--snapshot_name',type=str, default=None, help='Name the saved snapshot'
 ```
 # License
