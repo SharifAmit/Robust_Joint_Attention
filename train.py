@@ -27,7 +27,7 @@ def train(data_dir, logdir, input_size, batch_size, weights, epoch, pre_trained_
 
 
     # Loading the model
-    if pre_trained_model==None:
+    if pre_trained_model=='OpticNet71':
         model = OpticNet(input_size,num_of_classes)
     elif pre_trained_model=='ResNet50':
         model = resnet50(input_size,num_of_classes)
@@ -44,7 +44,10 @@ def train(data_dir, logdir, input_size, batch_size, weights, epoch, pre_trained_
     # Saving the final model
     if snapshot_name == None :
         model.save('Joint-Attention-OpticNet.h5')
-       
+    elif pre_trained_model=='MobileNetV2':
+        model.save('Joint-Attention-MobileNetV2.h5')
+    elif pre_trained_model=='ResNet50':
+        model.save('Joint-Attention-ResNet50.h5')
     else :    
         model.save(snapshot_name+'.h5')
     
@@ -58,7 +61,7 @@ if __name__ == '__main__':
     parser.add_argument('--epoch', type=int, default=30)
     parser.add_argument('--logdir', type=str)
     parser.add_argument('--weights', type=str,default=None, help='Resuming training from previous weights')
-    parser.add_argument('--model',type=str, default=None,help='Pretrained weights for transfer learning',choices=['ResNet50',
+    parser.add_argument('--model',type=str, default='OpticNet71',help='Pretrained weights for transfer learning',choices=['OpticNet71','ResNet50',
                                  'MobileNetV2'])
     parser.add_argument('--snapshot_name',type=str, default=None, help='Name the saved snapshot')
     args = parser.parse_args()
