@@ -31,6 +31,11 @@ https://ieeexplore.ieee.org/document/9190742
   pages={2476-2480},}
 ```
 
+# Virtual Oral Presentation (Youtube)
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/eW4gXKvrM3s/0.jpg)](https://www.youtube.com/watch?v=eW4gXKvrM3s)
+
+
 ## Pre-requisite
 - Ubuntu 18.04 / Windows 7 or later
 - NVIDIA Graphics card
