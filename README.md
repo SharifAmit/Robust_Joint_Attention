@@ -1,4 +1,8 @@
 # ICIP2020 Joint Robust Attention Network
+
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/improving-robustness-using-joint-attention/retinal-oct-disease-classification-on)](https://paperswithcode.com/sota/retinal-oct-disease-classification-on?p=improving-robustness-using-joint-attention)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/improving-robustness-using-joint-attention/retinal-oct-disease-classification-on-oct2017)](https://paperswithcode.com/sota/retinal-oct-disease-classification-on-oct2017?p=improving-robustness-using-joint-attention)
+
 This code is part of the supplementary materials for the IEEE ICIP 2020 for our paper Improving robustness using Joint Attention network for Optical Coherence Tomography Images . The paper has since been accpeted to IEEE ICIP 2020 and will be preseneted in October 2020.
 
 ![](img1.png)
